@@ -545,6 +545,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			 *  3. 把解析出来的xml标签封装成BeanDefinition对象
 			 */
 			// Tell the subclass to refresh the internal bean factory.
+			// 获得一个beanFactory，具体的创建在子类中实现，模板方法,在此方法中对xml进行解析
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
@@ -553,12 +554,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				// 子类中添加对应的PostProcessor
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.
 				/**
 				 * BeanDefinitionRegistryPostProcessor : 完成对BeanDefinition的注册
+				 *     实现此接口会传入一个registry
 				 * BeanFactoryPostProccessor
+				 *     此接口会传入一个beanFactory
 				 * 完成对这两个接口的调用
 				 *
 				 * 为什么要在beanDefinition读取完成了再在这里执行呢？
@@ -567,7 +571,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
-				// 将实现了BeanPostProccessor接口的类实例化，并加入到beanFactory中
+				// 将实现了BeanPostProcessor接口的类实例化，并加入到beanFactory中
 				registerBeanPostProcessors(beanFactory);
 
 				// 国际化
@@ -671,8 +675,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
-		// 核心方法，必须读，重要程度：5
+		// 创建beanFactory的核心方法，钩子方法，必须读，重要程度：5
 		refreshBeanFactory();
+		// 返回beanFactory
 		return getBeanFactory();
 	}
 
@@ -741,7 +746,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * <p>Must be called before singleton instantiation.
 	 */
 	protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
-		// 对 PostProcessor 实例化
+		// 对 PostProcessor 实例化，并调用实现了此接口的方法，会实例化实现者两个接口的类
 		PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(beanFactory, getBeanFactoryPostProcessors());
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found in the meantime

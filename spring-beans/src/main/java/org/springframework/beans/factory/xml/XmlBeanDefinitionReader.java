@@ -394,7 +394,7 @@ XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			throws BeanDefinitionStoreException {
 
 		try {
-			// 把InputSource封装成Document， jdk的api
+			// 把InputSource封装成Document， jdk的api，暂不做深究
 			Document doc = doLoadDocument(inputSource, resource);
 
 			// 重要程度5，根据解析出来的document对象，拿到里面的标签元素封装成BeanDefinition
@@ -539,6 +539,7 @@ XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * Create the {@link XmlReaderContext} to pass over to the document reader.
 	 */
 	public XmlReaderContext createReaderContext(Resource resource) {
+		// getNamespaceHandlerResolver() 中会将 META/spring.handler文件中的解析器解析出来
 		return new XmlReaderContext(resource, this.problemReporter, this.eventListener,
 				this.sourceExtractor, this, getNamespaceHandlerResolver());
 	}

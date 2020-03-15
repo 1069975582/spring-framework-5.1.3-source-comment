@@ -128,11 +128,11 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			closeBeanFactory();
 		}
 		try {
-			// 创建DefaultListableBeanFactory
+			// 创建DefaultListableBeanFactory实例
 			DefaultListableBeanFactory beanFactory = createBeanFactory();
 			beanFactory.setSerializationId(getId());
 
-			// 设置是否允许使用相同名称重新注册不同的bean实现
+			// 设置是否允许使用相同名称重新注册不同的bean实现 : allowBeanDefinitionOverriding
 			// 设置是否可以循环依赖：allowCircularReferences
 			customizeBeanFactory(beanFactory);
 

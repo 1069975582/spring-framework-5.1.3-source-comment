@@ -95,7 +95,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 		// then proceed with actually loading the bean definitions.
 		initBeanDefinitionReader(beanDefinitionReader);
 
-		// 重要程度：5
+		// 重要程度：5，必须读
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
@@ -124,6 +124,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	 * @see #getResourcePatternResolver
 	 */
 	protected void loadBeanDefinitions(XmlBeanDefinitionReader reader) throws BeansException, IOException {
+		// 将xml文件封装成Resource对象, Resource对象中实际持有InputStream
 		Resource[] configResources = getConfigResources();
 		if (configResources != null) {
 			reader.loadBeanDefinitions(configResources);
